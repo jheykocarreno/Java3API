@@ -30,7 +30,7 @@ public class FilmeController {
 
     @GetMapping
     @Operation(summary = "Listar todos os filmes")
-    public ResponseEntity<List<Filme>> listarFilmes() {
+    public ResponseEntity<List<FilmeResponseDTO>> listarFilmes() {
         List<FilmeResponseDTO> filmes = filmeService.listarTodosFilmes();
 
         if (filmes.isEmpty()) {

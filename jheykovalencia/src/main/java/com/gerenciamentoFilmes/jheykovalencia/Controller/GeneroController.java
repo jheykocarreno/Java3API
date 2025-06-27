@@ -38,4 +38,12 @@ public class GeneroController {
 
         return new ResponseEntity<>(generos,HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar genero")
+    public ResponseEntity<Void> deletarGenero(@PathVariable long id){
+        generoService.deletarGenero(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

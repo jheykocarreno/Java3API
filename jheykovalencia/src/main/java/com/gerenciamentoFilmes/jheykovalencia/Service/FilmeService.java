@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,5 +67,43 @@ public class FilmeService {
 
                     );
                 }).toList();
+    }
+
+    public void deletarFilme(long id){
+        Filme filmeEncontrado = filmesRepositary.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Filme com Id " + id + " nao encontrado!"));
+
+        filmesRepositary.delete(filmeEncontrado);
+    }
+
+    public Filme atualizarFilme(FilmeDTO filmeDTO){
+        Filme filmeEncontrado = filmesRepositary.findById(filmeDTO.idFilme())
+            .orElseThrow(() -> new EntityNotFoundException("Filme nao encontrado"));
+
+        filmeEncontrado.setNomeFilme(filmeDTO.nomeFilme());
+        filmeEncontrado.setAnoLancamentoFilme(filmeDTO.anoLancamentoFilme());
+
+        filmeEncontrado.getGeneros().clear();
+
+        List<FilmeGenero> novosGeneros = new ArrayList<>();
+
+        for (Long idGenero : filmeDTO.generoIds()) {
+            Genero genero = generoRepositary.findById(idGenero)
+                    .orElseThrow(() -> new EntityNotFoundException("Genero nao encontrado"));
+
+            FilmeGenero novoFG = new FilmeGenero();
+            novoFG.setFilme(filmeEncontrado);
+            novoFG.setGenero(genero);
+            novosGeneros.add(novoFG);
+        }
+        filmeEncontrado.getGeneros().addAll(novosGeneros);
+
+        return filmesRepositary.save(filmeEncontrado);
+    }
+
+    public Filme buscarFilmePorId(long id){
+        return filmesRepositary.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Nenhum filme com id foi encontrado"));
+
     }
 }

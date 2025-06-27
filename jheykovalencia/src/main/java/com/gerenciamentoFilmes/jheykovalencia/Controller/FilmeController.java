@@ -39,4 +39,28 @@ public class FilmeController {
 
         return new ResponseEntity<>(filmes, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar filme")
+    public ResponseEntity<Void> deletarFilme(@PathVariable long id) {
+        filmeService.deletarFilme(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{idFilme}")
+    @Operation(summary = "Atualizar filme")
+    public ResponseEntity<Filme> atualizarFilme(@RequestBody FilmeDTO filmeDTO) {
+        Filme filmeAtualizado = filmeService.atualizarFilme(filmeDTO);
+
+        return ResponseEntity.ok(filmeAtualizado);
+    }
+
+    @PostMapping("/{idFilme}")
+    @Operation(summary = "Buscar filme por ID")
+    public ResponseEntity<Filme> buscarFilme(@PathVariable long idFilme) {
+        return new ResponseEntity<>(filmeService.buscarFilmePorId(idFilme), HttpStatus.OK);
+
+        
+    }
 }

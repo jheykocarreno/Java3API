@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/generos")
 @CrossOrigin("*")
@@ -23,6 +25,17 @@ public class GeneroController {
     @Operation(summary = "Cadastrar generos")
     public ResponseEntity<Genero> cadastroGenero(@RequestBody Genero genero) {
         return new ResponseEntity<>(generoService.cadastrarGenero(genero),HttpStatus.CREATED);
-    };
+    }
 
+    @GetMapping
+    @Operation(summary = "Listar todos os generos")
+    public ResponseEntity<List<Genero>> listarGeneros(){
+        List<Genero> generos = generoService.listarTodosGeneros();
+
+        if (generos.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(generos,HttpStatus.OK);
+    }
 }
